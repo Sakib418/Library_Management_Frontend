@@ -1,69 +1,77 @@
-# React + TypeScript + Vite
+# 📚 Library Management System - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive frontend application for managing a digital library. This application allows users to manage books, borrow records, and view summaries, all built using powerful modern tools like React, Redux Toolkit Query, and TypeScript.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+### 📖 Book Management
+- Add new books with metadata (title, author, genre, ISBN, description, copies, availability).
+- Edit existing books directly from the book list.
+- Delete books with confirmation.
+- View all books in a sortable and filterable table.
+- Availability auto-handled based on number of copies.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📤 Borrow Book
+- Borrow books using a modal form (triggered from the book list).
+- Form fields: Quantity, Due Date.
+- Posts to the backend `Borrow Book` API.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📊 Borrow Summary
+- View total quantity of each book borrowed.
+- Uses aggregation API endpoint.
+- Displays columns: Book Title, ISBN, Total Borrowed Quantity.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 🔍 Filtering and Sorting
+- Filter by availability.
+- Sort by title, author, copies, etc.
+- Search functionality to quickly find a book.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🧩 State Management
+- Redux Toolkit Query (RTK Query) for data fetching and caching.
+- Optimistic UI updates and error handling using RTK Query.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🔔 Notifications
+- Toast messages for success and error states.
+- SweetAlert for confirmation dialogs.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 📱 Responsive Design
+- Fully mobile-friendly UI.
+- Accessible inputs and labels.
+- Tailored layout for both desktop and mobile users.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 🛠️ Technologies Used
+
+| Category       | Tech Stack                              |
+|----------------|------------------------------------------|
+| Framework      | [React](https://reactjs.org/)           |
+| Language       | [TypeScript](https://www.typescriptlang.org/) |
+| State/Data     | [Redux Toolkit](https://redux-toolkit.js.org/), [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) |
+| UI Components  | [ShadCN UI](https://ui.shadcn.com/), [Radix UI](https://www.radix-ui.com/) |
+| Form Handling  | [React Hook Form](https://react-hook-form.com/) |
+| Styling        | [Tailwind CSS](https://tailwindcss.com/) |
+| Notification   | [Sonner](https://sonner.emilkowal.ski/), [SweetAlert2](https://sweetalert2.github.io/) |
+| Build Tool     | [Vite](https://vitejs.dev/)              |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (>=18)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/library-frontend.git
+cd library-frontend
+
+# Install dependencies
+npm install
+# or
+yarn install

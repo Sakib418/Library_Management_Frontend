@@ -1,5 +1,8 @@
 import App from "@/App";
+import AddBookPage from "@/pages/AddBookModal";
+
 import Books from "@/pages/books";
+import BorrowSummaryPage from "@/pages/BorrowSummaryPage";
 import { createBrowserRouter } from "react-router";
 
 const router = createBrowserRouter([
@@ -8,8 +11,16 @@ const router = createBrowserRouter([
         element: <App/>,
         children: [
       {
-        path: "/", // child route path (renders inside <Outlet /> in App)
+        path: "/", 
         element: <Books/>,
+      },
+      {
+        path: "/addBooks", 
+        element:  <AddBookPage/>,
+      },
+      {
+        path: "/borrowSummary", 
+        element:  <BorrowSummaryPage/>,
       },
     ],
     },

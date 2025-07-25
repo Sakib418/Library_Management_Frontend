@@ -1,19 +1,19 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {  Form , FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form"
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import { useForm } from "react-hook-form"
-
+import { useCreateBookMutation } from "@/redux/api/baseApi";
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 type BookFormData = {
   title: string;
   author: string;
@@ -23,8 +23,12 @@ type BookFormData = {
   copies: number;
   available: boolean;
 };
-export function AddBookModal() {
-   const form = useForm<BookFormData>({
+
+export default function AddBookPage() {
+  const [createBook] = useCreateBookMutation();
+  const [submitting, setSubmitting] = useState(false);
+const navigate = useNavigate();
+  const form = useForm<BookFormData>({
     defaultValues: {
       title: "",
       author: "",
@@ -36,139 +40,137 @@ export function AddBookModal() {
     },
   });
 
- const onSubmit = (data:BookFormData) => {
-  console.log(data);
- }
+  const onSubmit: SubmitHandler<BookFormData> = async (data) => {
+    try {
+      setSubmitting(true);
+      await createBook(data).unwrap();
+      form.reset();
+      toast.success("✅ Book added successfully!");
+      navigate("/");
+    } catch (error: any) {
+      const errorMessage =
+        error?.data?.error?.message ||
+        error?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error("❌ Failed to add book", {
+        description: errorMessage,
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <Dialog>
-        <DialogTrigger asChild>
-          <Button className="font-bold bg-blue-100 text-blue-600 hover:bg-blue-200 text-xl">Add Book</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogDescription className="sr-only">
-            Fill up this form to add book
-          </DialogDescription>
-          <DialogHeader>
-            <DialogTitle>Add Book</DialogTitle>
-          </DialogHeader>
-          <Form {...form}>
-           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              <FormField
-    control={form.control}
-    name="title"
-    render={({field}) => (
-      <FormItem>
-        <FormLabel >Title</FormLabel>
-        <FormControl>
-          <Input {...field} value={field.value || ""} />
-        </FormControl>
-        
-      </FormItem>
-    )}
-  />
+    <div className="max-w-xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Add a New Book</h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
- <FormField
-              control={form.control}
-              name="author"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Author</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="author"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Author</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="genre"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Genre</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="genre"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Genre</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="isbn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ISBN</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="isbn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ISBN</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="copies"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Copies</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      value={field.value ?? 0}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="copies"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Copies</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    {...field}
+                    value={field.value ?? 0}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-           <FormField
-  control={form.control}
-  name="description"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Description</FormLabel>
-      <FormControl>
-        <Textarea
-          {...field}
-          rows={3}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        />
-      </FormControl>
-    </FormItem>
-  )}
-/>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea rows={3} {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
+          <FormField
+            control={form.control}
+            name="available"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(value) =>
+                      field.onChange(Boolean(value))
+                    }
+                  />
+                </FormControl>
+                <FormLabel className="mb-0">Available</FormLabel>
+              </FormItem>
+            )}
+          />
 
-
-            <FormField
-              control={form.control}
-              name="available"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-x-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={(value) =>
-                        field.onChange(Boolean(value))
-                      }
-                    />
-                  </FormControl>
-                  <FormLabel className="mb-0">Available</FormLabel>
-                </FormItem>
-              )}
-            />
-
-    <DialogFooter className="mt-4">
-            <Button type="submit">Save changes</Button>
-    </DialogFooter>
-           </form>
-          
-          </Form>
-        </DialogContent>
-     
-    </Dialog>
-  )
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Adding..." : "Add Book"}
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
 }

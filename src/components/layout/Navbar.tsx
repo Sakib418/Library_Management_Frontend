@@ -11,8 +11,8 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "All Books", path: "/" },
-    { name: "Add Book", path: "/books" },
-    { name: "Borrow Summary", path: "/about" },
+    { name: "Add Book", path: "/addBooks" },
+    { name: "Borrow Summary", path: "/borrowSummary" },
   ];
 
   return (
