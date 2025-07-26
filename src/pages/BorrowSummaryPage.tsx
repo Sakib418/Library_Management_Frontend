@@ -16,7 +16,12 @@ import {
 } from "@/components/ui/alert";
 
 export default function BorrowSummaryPage() {
-  const { data, isLoading, isError } = useGetBorrowedBooksQuery(undefined);
+  const { data, isLoading, isError } = useGetBorrowedBooksQuery(undefined,{
+    pollingInterval: 3000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true
+  });
   console.log(data);
   const borrowList = data?.data || [];
   return (
@@ -56,62 +61,82 @@ export default function BorrowSummaryPage() {
       !isLoading && borrowList?.length > 0 && (
         <>
           
+          
           <div className="hidden md:block">
-            <Card>
-              <CardContent className="p-0 overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Book Title</TableHead>
-                      <TableHead>ISBN</TableHead>
-                      <TableHead className="text-right">
-                        Total Borrowed
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {borrowList.map((item: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell>{item.book.title}</TableCell>
-                        <TableCell>{item.book.isbn}</TableCell>
-                        <TableCell className="text-right">
-                          {item.totalQuantity}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
+  <Card className="shadow-lg rounded-2xl">
+    <CardContent className="p-0 overflow-x-auto">
+      <Table>
+        <TableHeader className="bg-gray-100 dark:bg-gray-800 sticky top-0 z-10">
+          <TableRow>
+            <TableHead className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-4 py-3">
+              Book Title
+            </TableHead>
+            <TableHead className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-4 py-3">
+              ISBN
+            </TableHead>
+            <TableHead className="text-right text-sm font-semibold text-gray-700 dark:text-gray-200 px-4 py-3">
+              Total Borrowed
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {borrowList.map((item: any, index: number) => (
+            <TableRow
+              key={index}
+              className={`transition-colors hover:bg-muted/50 ${
+                index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"
+              }`}
+            >
+              <TableCell className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">
+                {item.book.title}
+              </TableCell>
+              <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
+                {item.book.isbn}
+              </TableCell>
+              <TableCell className="px-4 py-3 text-right text-sm font-semibold text-gray-800 dark:text-gray-200">
+                {item.totalQuantity}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </CardContent>
+  </Card>
+</div>
 
          
+         
+
           <div className="space-y-4 md:hidden">
-            {borrowList.map((item: any, index: number) => (
-              <Card key={index}>
-                <CardContent className="p-4 space-y-2">
-                  <p>
-                    <span className="font-medium text-muted-foreground">
-                      Title:
-                    </span>{" "}
-                    {item.book.title}
-                  </p>
-                  <p>
-                    <span className="font-medium text-muted-foreground">
-                      ISBN:
-                    </span>{" "}
-                    {item.book.isbn}
-                  </p>
-                  <p>
-                    <span className="font-medium text-muted-foreground">
-                      Total Borrowed:
-                    </span>{" "}
-                    {item.totalQuantity}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+  {borrowList.map((item: any, index: number) => (
+    <Card
+      key={index}
+      className="rounded-xl shadow-md border border-border hover:shadow-lg transition-shadow"
+    >
+      <CardContent className="p-4 space-y-2 text-sm">
+        <div>
+          <p className="text-xs font-semibold text-muted-foreground">Title</p>
+          <p className="text-base font-medium text-foreground">
+            {item.book.title}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-muted-foreground">ISBN</p>
+          <p className="text-base text-foreground">{item.book.isbn}</p>
+        </div>
+        <div>
+          <p className="text-xs font-semibold text-muted-foreground">
+            Total Borrowed
+          </p>
+          <p className="text-base font-semibold text-primary">
+            {item.totalQuantity}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  ))}
+</div>
+
         </>
       )}
     </div>
