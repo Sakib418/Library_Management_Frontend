@@ -23,7 +23,7 @@ export default function Books() {
 
   const [deleteBook] = useDeleteBookMutation();
   const { data, isLoading, isError } = useGetBooksQuery(undefined,{
-    pollingInterval: 3000,
+    pollingInterval: 30000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true

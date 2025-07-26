@@ -17,10 +17,7 @@ import {
 
 export default function BorrowSummaryPage() {
   const { data, isLoading, isError } = useGetBorrowedBooksQuery(undefined,{
-    pollingInterval: 3000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true
+    
   });
   console.log(data);
   const borrowList = data?.data || [];
